@@ -1,0 +1,24 @@
+- name: Copy Nginx JSP support Configuration 
+  copy: src=jsp.conf dest=/etc/nginx/extra
+
+- name: Copy Nginx JSP vhost Configuration 
+  copy: src=default.conf dest=/etc/nginx/conf.d
+
+- name: copy tomcat Configuration
+  copy: src=server.xml dest=/usr/local/tomcat/conf
+
+- name: Create
+  file: 
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - /data/apps/9panel
+    - /data/wwwroot/www.example.com
+
+- name: Restart 
+  service:
+    name: "{{item}}"
+    state: restarted
+  with_items:
+    - nginx
+    - tomcat
